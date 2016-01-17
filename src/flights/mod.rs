@@ -1,8 +1,10 @@
 pub mod search_request;
 pub mod search_response;
+pub mod offer;
 
 pub type SearchRequest = search_request::SearchRequest;
 pub type SearchResponse = search_response::SearchResponse;
+pub type Offer = offer::Offer;
 
 #[derive(Debug)]
 pub enum Error {
@@ -10,5 +12,7 @@ pub enum Error {
     SendingRequest,
     ReadingResponse,
     ResponseNotOk,
-    DecodingJson(String)
+    DecodingJson(String),
+    NoPricing,
+    NoFlights
 }
