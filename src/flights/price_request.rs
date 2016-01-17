@@ -99,12 +99,28 @@ impl PriceRequest {
         self
     }
 
+    pub fn add_trip(&mut self, origin: &str, destination: &str, date: &str, max_stops: u8) -> &mut Self {
+        let slice = Slice {
+            kind: SLICE_KIND,
+            origin: origin.to_string(),
+            destination: destination.to_string(),
+            date: date.to_string(),
+            maxStops: max_stops,
+            maxConnectionDuration: None,
+            preferredCabin: None
+        };
+
+        self.request.slice.push(slice);
+
+        self
+    }
+
     pub fn to_json(&self) -> Result<String, Error> {
         json::encode(self).map_err(|_| Error::EncodingJson )
     }
 
     pub fn call(&self, api_key: &str) -> Result<PriceResponse, Error> {
-        let url = format!("{}?key={}", SEARCH_URL, api_key);
+        let url = SEARCH_URL.to_string() + "?key=" + api_key;
         let request_body = try!(self.to_json());
 
         let client  = Client::new();

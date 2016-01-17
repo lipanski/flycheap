@@ -6,14 +6,10 @@ authors = ["Florin Lipan <florinlipan@gmail.com>"]
 [lib]
 doctest = false
 
+[features]
+default = ["mockito/use_hyper"]
+
 [dependencies]
 rustc-serialize = "0.3.16"
 hyper = "0.7.2"
-
-[dependencies.mockito]
-version = "0.1.4"
-features = ["use_hyper"]
-
-[dev-dependencies.mockito]
-version = "0.1.4"
-features = ["mock_hyper"]
+mockito = "0.1.4"
