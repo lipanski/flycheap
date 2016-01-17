@@ -1,0 +1,760 @@
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=UTF-8
+Content-Length: 19160
+
+{
+ "kind": "qpxExpress#tripsSearch",
+ "trips": {
+  "kind": "qpxexpress#tripOptions",
+  "requestId": "bwrfa5nntkafbK6iE0NcY4",
+  "data": {
+   "kind": "qpxexpress#data",
+   "airport": [
+    {
+     "kind": "qpxexpress#airportData",
+     "code": "OTP",
+     "city": "BUH",
+     "name": "Bucharest Henri Coanda"
+    },
+    {
+     "kind": "qpxexpress#airportData",
+     "code": "TXL",
+     "city": "BER",
+     "name": "Berlin Tegel"
+    }
+   ],
+   "city": [
+    {
+     "kind": "qpxexpress#cityData",
+     "code": "BER",
+     "name": "Berlin"
+    },
+    {
+     "kind": "qpxexpress#cityData",
+     "code": "BUH",
+     "name": "Bucharest"
+    }
+   ],
+   "aircraft": [
+    {
+     "kind": "qpxexpress#aircraftData",
+     "code": "319",
+     "name": "Airbus A319"
+    }
+   ],
+   "tax": [
+    {
+     "kind": "qpxexpress#taxData",
+     "id": "DE_001",
+     "name": "Germany Airport Security Charge"
+    },
+    {
+     "kind": "qpxexpress#taxData",
+     "id": "DC_001",
+     "name": "Romania Security Charge"
+    },
+    {
+     "kind": "qpxexpress#taxData",
+     "id": "YQ_F",
+     "name": "AB YQ surcharge"
+    },
+    {
+     "kind": "qpxexpress#taxData",
+     "id": "OY_001",
+     "name": "German Air Transport Tax"
+    },
+    {
+     "kind": "qpxexpress#taxData",
+     "id": "RO_001",
+     "name": "Romania Airport Departure Tax"
+    },
+    {
+     "kind": "qpxexpress#taxData",
+     "id": "RA_002",
+     "name": "German Passenger Service Charge"
+    }
+   ],
+   "carrier": [
+    {
+     "kind": "qpxexpress#carrierData",
+     "code": "AB",
+     "name": "Air Berlin PLC & Co. Luftverkehrs KG"
+    }
+   ]
+  },
+  "tripOption": [
+   {
+    "kind": "qpxexpress#tripOption",
+    "saleTotal": "EUR194.56",
+    "id": "8zbPMZyxeX1O2vyrHtzPtA001",
+    "slice": [
+     {
+      "kind": "qpxexpress#sliceInfo",
+      "duration": 130,
+      "segment": [
+       {
+        "kind": "qpxexpress#segmentInfo",
+        "duration": 130,
+        "flight": {
+         "carrier": "AB",
+         "number": "8272"
+        },
+        "id": "GD8ujQ6CsbGhvHUT",
+        "cabin": "COACH",
+        "bookingCode": "Z",
+        "bookingCodeCount": 9,
+        "marriedSegmentGroup": "0",
+        "leg": [
+         {
+          "kind": "qpxexpress#legInfo",
+          "id": "L7pLEzeVRaHozZBn",
+          "aircraft": "319",
+          "arrivalTime": "2016-03-29T00:45+03:00",
+          "departureTime": "2016-03-28T21:35+02:00",
+          "origin": "TXL",
+          "destination": "OTP",
+          "duration": 130,
+          "mileage": 802,
+          "meal": "Snack or Brunch"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "qpxexpress#sliceInfo",
+      "duration": 125,
+      "segment": [
+       {
+        "kind": "qpxexpress#segmentInfo",
+        "duration": 125,
+        "flight": {
+         "carrier": "AB",
+         "number": "8273"
+        },
+        "id": "G3Ofi-bSnkomAw2u",
+        "cabin": "COACH",
+        "bookingCode": "O",
+        "bookingCodeCount": 9,
+        "marriedSegmentGroup": "1",
+        "leg": [
+         {
+          "kind": "qpxexpress#legInfo",
+          "id": "Labb0krYuEwAmVPk",
+          "aircraft": "319",
+          "arrivalTime": "2016-04-03T07:35+02:00",
+          "departureTime": "2016-04-03T06:30+03:00",
+          "origin": "OTP",
+          "destination": "TXL",
+          "duration": 125,
+          "mileage": 802,
+          "meal": "Snack or Brunch"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "pricing": [
+     {
+      "kind": "qpxexpress#pricingInfo",
+      "fare": [
+       {
+        "kind": "qpxexpress#fareInfo",
+        "id": "AYrknib7+CokbpJ2x38vV/9uO57QbpK2Cw/NU6Kj1rCg",
+        "carrier": "AB",
+        "origin": "BER",
+        "destination": "BUH",
+        "basisCode": "ZNN32RT"
+       },
+       {
+        "kind": "qpxexpress#fareInfo",
+        "id": "ArxNINPei+Ek4KO71Q5DqmlnAu790V4Ll+22riv2R5x/",
+        "carrier": "AB",
+        "origin": "BUH",
+        "destination": "BER",
+        "basisCode": "ONNRT"
+       }
+      ],
+      "segmentPricing": [
+       {
+        "kind": "qpxexpress#segmentPricing",
+        "fareId": "AYrknib7+CokbpJ2x38vV/9uO57QbpK2Cw/NU6Kj1rCg",
+        "segmentId": "GD8ujQ6CsbGhvHUT"
+       },
+       {
+        "kind": "qpxexpress#segmentPricing",
+        "fareId": "ArxNINPei+Ek4KO71Q5DqmlnAu790V4Ll+22riv2R5x/",
+        "segmentId": "G3Ofi-bSnkomAw2u"
+       }
+      ],
+      "baseFareTotal": "EUR72.00",
+      "saleFareTotal": "EUR72.00",
+      "saleTaxTotal": "EUR122.56",
+      "saleTotal": "EUR194.56",
+      "passengers": {
+       "kind": "qpxexpress#passengerCounts",
+       "adultCount": 1
+      },
+      "tax": [
+       {
+        "kind": "qpxexpress#taxInfo",
+        "id": "DE_001",
+        "chargeType": "GOVERNMENT",
+        "code": "DE",
+        "country": "DE",
+        "salePrice": "EUR6.87"
+       },
+       {
+        "kind": "qpxexpress#taxInfo",
+        "id": "RA_002",
+        "chargeType": "GOVERNMENT",
+        "code": "RA",
+        "country": "DE",
+        "salePrice": "EUR14.99"
+       },
+       {
+        "kind": "qpxexpress#taxInfo",
+        "id": "YQ_F",
+        "chargeType": "CARRIER_SURCHARGE",
+        "code": "YQ",
+        "salePrice": "EUR72.00"
+       },
+       {
+        "kind": "qpxexpress#taxInfo",
+        "id": "OY_001",
+        "chargeType": "GOVERNMENT",
+        "code": "OY",
+        "country": "DE",
+        "salePrice": "EUR7.38"
+       },
+       {
+        "kind": "qpxexpress#taxInfo",
+        "id": "RO_001",
+        "chargeType": "GOVERNMENT",
+        "code": "RO",
+        "country": "RO",
+        "salePrice": "EUR14.32"
+       },
+       {
+        "kind": "qpxexpress#taxInfo",
+        "id": "DC_001",
+        "chargeType": "GOVERNMENT",
+        "code": "DC",
+        "country": "RO",
+        "salePrice": "EUR7.00"
+       }
+      ],
+      "fareCalculation": "BER AB BUH 13.61ZNN32RT AB BER M 64.78ONNRT NUC 78.39 END ROE 0.918404 FARE EUR 72.00 XT 6.87DE 7.38OY 14.99RA 7.00DC 14.32RO 72.00YQ",
+      "latestTicketingTime": "2016-01-20T17:48-05:00",
+      "ptc": "ADT"
+     }
+    ]
+   },
+   {
+    "kind": "qpxexpress#tripOption",
+    "saleTotal": "EUR209.56",
+    "id": "8zbPMZyxeX1O2vyrHtzPtA002",
+    "slice": [
+     {
+      "kind": "qpxexpress#sliceInfo",
+      "duration": 130,
+      "segment": [
+       {
+        "kind": "qpxexpress#segmentInfo",
+        "duration": 130,
+        "flight": {
+         "carrier": "AB",
+         "number": "8272"
+        },
+        "id": "GD8ujQ6CsbGhvHUT",
+        "cabin": "COACH",
+        "bookingCode": "Z",
+        "bookingCodeCount": 9,
+        "marriedSegmentGroup": "0",
+        "leg": [
+         {
+          "kind": "qpxexpress#legInfo",
+          "id": "L7pLEzeVRaHozZBn",
+          "aircraft": "319",
+          "arrivalTime": "2016-03-29T00:45+03:00",
+          "departureTime": "2016-03-28T21:35+02:00",
+          "origin": "TXL",
+          "destination": "OTP",
+          "duration": 130,
+          "mileage": 802,
+          "meal": "Snack or Brunch"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "qpxexpress#sliceInfo",
+      "duration": 125,
+      "segment": [
+       {
+        "kind": "qpxexpress#segmentInfo",
+        "duration": 125,
+        "flight": {
+         "carrier": "AB",
+         "number": "8271"
+        },
+        "id": "GTLih4zqC7ID8xPt",
+        "cabin": "COACH",
+        "bookingCode": "Q",
+        "bookingCodeCount": 9,
+        "marriedSegmentGroup": "1",
+        "leg": [
+         {
+          "kind": "qpxexpress#legInfo",
+          "id": "Loa-Y0KHjgnr9nDa",
+          "aircraft": "319",
+          "arrivalTime": "2016-04-03T14:40+02:00",
+          "departureTime": "2016-04-03T13:35+03:00",
+          "origin": "OTP",
+          "destination": "TXL",
+          "duration": 125,
+          "mileage": 802,
+          "meal": "Snack or Brunch"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "pricing": [
+     {
+      "kind": "qpxexpress#pricingInfo",
+      "fare": [
+       {
+        "kind": "qpxexpress#fareInfo",
+        "id": "AYrknib7+CokbpJ2x38vV/9uO57QbpK2Cw/NU6Kj1rCg",
+        "carrier": "AB",
+        "origin": "BER",
+        "destination": "BUH",
+        "basisCode": "ZNN32RT"
+       },
+       {
+        "kind": "qpxexpress#fareInfo",
+        "id": "AAaDrhX++Vau1lIE9VTGcMtdD+336UDalEkskNv3WZW6",
+        "carrier": "AB",
+        "origin": "BUH",
+        "destination": "BER",
+        "basisCode": "QNNRT"
+       }
+      ],
+      "segmentPricing": [
+       {
+        "kind": "qpxexpress#segmentPricing",
+        "fareId": "AYrknib7+CokbpJ2x38vV/9uO57QbpK2Cw/NU6Kj1rCg",
+        "segmentId": "GD8ujQ6CsbGhvHUT"
+       },
+       {
+        "kind": "qpxexpress#segmentPricing",
+        "fareId": "AAaDrhX++Vau1lIE9VTGcMtdD+336UDalEkskNv3WZW6",
+        "segmentId": "GTLih4zqC7ID8xPt"
+       }
+      ],
+      "baseFareTotal": "EUR87.00",
+      "saleFareTotal": "EUR87.00",
+      "saleTaxTotal": "EUR122.56",
+      "saleTotal": "EUR209.56",
+      "passengers": {
+       "kind": "qpxexpress#passengerCounts",
+       "adultCount": 1
+      },
+      "tax": [
+       {
+        "kind": "qpxexpress#taxInfo",
+        "id": "DE_001",
+        "chargeType": "GOVERNMENT",
+        "code": "DE",
+        "country": "DE",
+        "salePrice": "EUR6.87"
+       },
+       {
+        "kind": "qpxexpress#taxInfo",
+        "id": "RA_002",
+        "chargeType": "GOVERNMENT",
+        "code": "RA",
+        "country": "DE",
+        "salePrice": "EUR14.99"
+       },
+       {
+        "kind": "qpxexpress#taxInfo",
+        "id": "YQ_F",
+        "chargeType": "CARRIER_SURCHARGE",
+        "code": "YQ",
+        "salePrice": "EUR72.00"
+       },
+       {
+        "kind": "qpxexpress#taxInfo",
+        "id": "OY_001",
+        "chargeType": "GOVERNMENT",
+        "code": "OY",
+        "country": "DE",
+        "salePrice": "EUR7.38"
+       },
+       {
+        "kind": "qpxexpress#taxInfo",
+        "id": "RO_001",
+        "chargeType": "GOVERNMENT",
+        "code": "RO",
+        "country": "RO",
+        "salePrice": "EUR14.32"
+       },
+       {
+        "kind": "qpxexpress#taxInfo",
+        "id": "DC_001",
+        "chargeType": "GOVERNMENT",
+        "code": "DC",
+        "country": "RO",
+        "salePrice": "EUR7.00"
+       }
+      ],
+      "fareCalculation": "BER AB BUH 13.61ZNN32RT AB BER M 81.11QNNRT NUC 94.72 END ROE 0.918404 FARE EUR 87.00 XT 6.87DE 7.38OY 14.99RA 7.00DC 14.32RO 72.00YQ",
+      "latestTicketingTime": "2016-01-20T17:48-05:00",
+      "ptc": "ADT"
+     }
+    ]
+   },
+   {
+    "kind": "qpxexpress#tripOption",
+    "saleTotal": "EUR239.56",
+    "id": "8zbPMZyxeX1O2vyrHtzPtA003",
+    "slice": [
+     {
+      "kind": "qpxexpress#sliceInfo",
+      "duration": 125,
+      "segment": [
+       {
+        "kind": "qpxexpress#segmentInfo",
+        "duration": 125,
+        "flight": {
+         "carrier": "AB",
+         "number": "8270"
+        },
+        "id": "GsTm527IyS12vHnI",
+        "cabin": "COACH",
+        "bookingCode": "P",
+        "bookingCodeCount": 9,
+        "marriedSegmentGroup": "0",
+        "leg": [
+         {
+          "kind": "qpxexpress#legInfo",
+          "id": "LdmtQ2DIc6hPWzX+",
+          "aircraft": "319",
+          "arrivalTime": "2016-03-28T12:50+03:00",
+          "departureTime": "2016-03-28T09:45+02:00",
+          "origin": "TXL",
+          "destination": "OTP",
+          "duration": 125,
+          "mileage": 802,
+          "meal": "Snack or Brunch"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "qpxexpress#sliceInfo",
+      "duration": 125,
+      "segment": [
+       {
+        "kind": "qpxexpress#segmentInfo",
+        "duration": 125,
+        "flight": {
+         "carrier": "AB",
+         "number": "8273"
+        },
+        "id": "G3Ofi-bSnkomAw2u",
+        "cabin": "COACH",
+        "bookingCode": "O",
+        "bookingCodeCount": 9,
+        "marriedSegmentGroup": "1",
+        "leg": [
+         {
+          "kind": "qpxexpress#legInfo",
+          "id": "Labb0krYuEwAmVPk",
+          "aircraft": "319",
+          "arrivalTime": "2016-04-03T07:35+02:00",
+          "departureTime": "2016-04-03T06:30+03:00",
+          "origin": "OTP",
+          "destination": "TXL",
+          "duration": 125,
+          "mileage": 802,
+          "meal": "Snack or Brunch"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "pricing": [
+     {
+      "kind": "qpxexpress#pricingInfo",
+      "fare": [
+       {
+        "kind": "qpxexpress#fareInfo",
+        "id": "AnYGbBelhO0wOINUPgGR0SwPKM2ppH+2pwn9hDezgU/E",
+        "carrier": "AB",
+        "origin": "BER",
+        "destination": "BUH",
+        "basisCode": "PNNRT"
+       },
+       {
+        "kind": "qpxexpress#fareInfo",
+        "id": "ArxNINPei+Ek4KO71Q5DqmlnAu790V4Ll+22riv2R5x/",
+        "carrier": "AB",
+        "origin": "BUH",
+        "destination": "BER",
+        "basisCode": "ONNRT"
+       }
+      ],
+      "segmentPricing": [
+       {
+        "kind": "qpxexpress#segmentPricing",
+        "fareId": "AnYGbBelhO0wOINUPgGR0SwPKM2ppH+2pwn9hDezgU/E",
+        "segmentId": "GsTm527IyS12vHnI"
+       },
+       {
+        "kind": "qpxexpress#segmentPricing",
+        "fareId": "ArxNINPei+Ek4KO71Q5DqmlnAu790V4Ll+22riv2R5x/",
+        "segmentId": "G3Ofi-bSnkomAw2u"
+       }
+      ],
+      "baseFareTotal": "EUR109.00",
+      "saleFareTotal": "EUR109.00",
+      "saleTaxTotal": "EUR130.56",
+      "saleTotal": "EUR239.56",
+      "passengers": {
+       "kind": "qpxexpress#passengerCounts",
+       "adultCount": 1
+      },
+      "tax": [
+       {
+        "kind": "qpxexpress#taxInfo",
+        "id": "DE_001",
+        "chargeType": "GOVERNMENT",
+        "code": "DE",
+        "country": "DE",
+        "salePrice": "EUR6.87"
+       },
+       {
+        "kind": "qpxexpress#taxInfo",
+        "id": "RA_002",
+        "chargeType": "GOVERNMENT",
+        "code": "RA",
+        "country": "DE",
+        "salePrice": "EUR14.99"
+       },
+       {
+        "kind": "qpxexpress#taxInfo",
+        "id": "YQ_F",
+        "chargeType": "CARRIER_SURCHARGE",
+        "code": "YQ",
+        "salePrice": "EUR80.00"
+       },
+       {
+        "kind": "qpxexpress#taxInfo",
+        "id": "OY_001",
+        "chargeType": "GOVERNMENT",
+        "code": "OY",
+        "country": "DE",
+        "salePrice": "EUR7.38"
+       },
+       {
+        "kind": "qpxexpress#taxInfo",
+        "id": "RO_001",
+        "chargeType": "GOVERNMENT",
+        "code": "RO",
+        "country": "RO",
+        "salePrice": "EUR14.32"
+       },
+       {
+        "kind": "qpxexpress#taxInfo",
+        "id": "DC_001",
+        "chargeType": "GOVERNMENT",
+        "code": "DC",
+        "country": "RO",
+        "salePrice": "EUR7.00"
+       }
+      ],
+      "fareCalculation": "BER AB BUH M 53.89PNNRT AB BER M 64.78ONNRT NUC 118.67 END ROE 0.918404 FARE EUR 109.00 XT 6.87DE 7.38OY 14.99RA 7.00DC 14.32RO 80.00YQ",
+      "latestTicketingTime": "2016-01-20T17:48-05:00",
+      "ptc": "ADT"
+     }
+    ]
+   },
+   {
+    "kind": "qpxexpress#tripOption",
+    "saleTotal": "EUR254.56",
+    "id": "8zbPMZyxeX1O2vyrHtzPtA004",
+    "slice": [
+     {
+      "kind": "qpxexpress#sliceInfo",
+      "duration": 125,
+      "segment": [
+       {
+        "kind": "qpxexpress#segmentInfo",
+        "duration": 125,
+        "flight": {
+         "carrier": "AB",
+         "number": "8270"
+        },
+        "id": "GsTm527IyS12vHnI",
+        "cabin": "COACH",
+        "bookingCode": "P",
+        "bookingCodeCount": 9,
+        "marriedSegmentGroup": "0",
+        "leg": [
+         {
+          "kind": "qpxexpress#legInfo",
+          "id": "LdmtQ2DIc6hPWzX+",
+          "aircraft": "319",
+          "arrivalTime": "2016-03-28T12:50+03:00",
+          "departureTime": "2016-03-28T09:45+02:00",
+          "origin": "TXL",
+          "destination": "OTP",
+          "duration": 125,
+          "mileage": 802,
+          "meal": "Snack or Brunch"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "kind": "qpxexpress#sliceInfo",
+      "duration": 125,
+      "segment": [
+       {
+        "kind": "qpxexpress#segmentInfo",
+        "duration": 125,
+        "flight": {
+         "carrier": "AB",
+         "number": "8271"
+        },
+        "id": "GTLih4zqC7ID8xPt",
+        "cabin": "COACH",
+        "bookingCode": "Q",
+        "bookingCodeCount": 9,
+        "marriedSegmentGroup": "1",
+        "leg": [
+         {
+          "kind": "qpxexpress#legInfo",
+          "id": "Loa-Y0KHjgnr9nDa",
+          "aircraft": "319",
+          "arrivalTime": "2016-04-03T14:40+02:00",
+          "departureTime": "2016-04-03T13:35+03:00",
+          "origin": "OTP",
+          "destination": "TXL",
+          "duration": 125,
+          "mileage": 802,
+          "meal": "Snack or Brunch"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "pricing": [
+     {
+      "kind": "qpxexpress#pricingInfo",
+      "fare": [
+       {
+        "kind": "qpxexpress#fareInfo",
+        "id": "AnYGbBelhO0wOINUPgGR0SwPKM2ppH+2pwn9hDezgU/E",
+        "carrier": "AB",
+        "origin": "BER",
+        "destination": "BUH",
+        "basisCode": "PNNRT"
+       },
+       {
+        "kind": "qpxexpress#fareInfo",
+        "id": "AAaDrhX++Vau1lIE9VTGcMtdD+336UDalEkskNv3WZW6",
+        "carrier": "AB",
+        "origin": "BUH",
+        "destination": "BER",
+        "basisCode": "QNNRT"
+       }
+      ],
+      "segmentPricing": [
+       {
+        "kind": "qpxexpress#segmentPricing",
+        "fareId": "AnYGbBelhO0wOINUPgGR0SwPKM2ppH+2pwn9hDezgU/E",
+        "segmentId": "GsTm527IyS12vHnI"
+       },
+       {
+        "kind": "qpxexpress#segmentPricing",
+        "fareId": "AAaDrhX++Vau1lIE9VTGcMtdD+336UDalEkskNv3WZW6",
+        "segmentId": "GTLih4zqC7ID8xPt"
+       }
+      ],
+      "baseFareTotal": "EUR124.00",
+      "saleFareTotal": "EUR124.00",
+      "saleTaxTotal": "EUR130.56",
+      "saleTotal": "EUR254.56",
+      "passengers": {
+       "kind": "qpxexpress#passengerCounts",
+       "adultCount": 1
+      },
+      "tax": [
+       {
+        "kind": "qpxexpress#taxInfo",
+        "id": "DE_001",
+        "chargeType": "GOVERNMENT",
+        "code": "DE",
+        "country": "DE",
+        "salePrice": "EUR6.87"
+       },
+       {
+        "kind": "qpxexpress#taxInfo",
+        "id": "RA_002",
+        "chargeType": "GOVERNMENT",
+        "code": "RA",
+        "country": "DE",
+        "salePrice": "EUR14.99"
+       },
+       {
+        "kind": "qpxexpress#taxInfo",
+        "id": "YQ_F",
+        "chargeType": "CARRIER_SURCHARGE",
+        "code": "YQ",
+        "salePrice": "EUR80.00"
+       },
+       {
+        "kind": "qpxexpress#taxInfo",
+        "id": "OY_001",
+        "chargeType": "GOVERNMENT",
+        "code": "OY",
+        "country": "DE",
+        "salePrice": "EUR7.38"
+       },
+       {
+        "kind": "qpxexpress#taxInfo",
+        "id": "RO_001",
+        "chargeType": "GOVERNMENT",
+        "code": "RO",
+        "country": "RO",
+        "salePrice": "EUR14.32"
+       },
+       {
+        "kind": "qpxexpress#taxInfo",
+        "id": "DC_001",
+        "chargeType": "GOVERNMENT",
+        "code": "DC",
+        "country": "RO",
+        "salePrice": "EUR7.00"
+       }
+      ],
+      "fareCalculation": "BER AB BUH M 53.89PNNRT AB BER M 81.11QNNRT NUC 135.00 END ROE 0.918404 FARE EUR 124.00 XT 6.87DE 7.38OY 14.99RA 7.00DC 14.32RO 80.00YQ",
+      "latestTicketingTime": "2016-01-20T17:48-05:00",
+      "ptc": "ADT"
+     }
+    ]
+   }
+  ]
+ }
+}
