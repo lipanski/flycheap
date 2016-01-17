@@ -1,5 +1,5 @@
 #[derive(RustcDecodable)]
-pub struct PriceResponse {
+pub struct SearchResponse {
     pub trips: Trips
 }
 

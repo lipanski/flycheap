@@ -1,12 +1,12 @@
 extern crate fly_cheap;
 extern crate mockito;
 
-use fly_cheap::flights::{PriceRequest, PriceResponse};
+use fly_cheap::flights::{SearchRequest, SearchResponse};
 
-fn mocked_roundtrip() -> PriceResponse {
+fn mocked_roundtrip() -> SearchResponse {
     mockito::mock("POST", "/qpxExpress/v1/trips/search?key=api_key").respond_with_file("tests/mocks/roundtrip.http");
 
-    let mut request = PriceRequest::new();
+    let mut request = SearchRequest::new();
     request.add_trip("TXL", "OTP", "2016-03-28", 0);
     request.add_trip("OTP", "TXL", "2016-04-03", 0);
 

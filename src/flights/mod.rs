@@ -1,8 +1,8 @@
-pub mod price_request;
-pub mod price_response;
+pub mod search_request;
+pub mod search_response;
 
-pub type PriceRequest = price_request::PriceRequest;
-pub type PriceResponse = price_response::PriceResponse;
+pub type SearchRequest = search_request::SearchRequest;
+pub type SearchResponse = search_response::SearchResponse;
 
 #[derive(Debug)]
 pub enum Error {

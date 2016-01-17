@@ -6,7 +6,7 @@ use hyper::header::{Connection, ContentType};
 use hyper::status::StatusCode;
 use mockito::url::Url;
 
-use flights::PriceResponse;
+use flights::SearchResponse;
 use flights::Error;
 
 const SEARCH_URL: &'static str = "https://www.googleapis.com/qpxExpress/v1/trips/search";
@@ -14,7 +14,7 @@ const PASSENGER_COUNT_KIND: &'static str = "qpxexpress#passengerCounts";
 const SLICE_KIND: &'static str = "qpxexpress#sliceInput";
 
 #[derive(RustcEncodable)]
-pub struct PriceRequest {
+pub struct SearchRequest {
     request: Request
 }
 
@@ -51,7 +51,7 @@ struct Slice {
     preferredCabin: Option<String>
 }
 
-impl PriceRequest {
+impl SearchRequest {
     pub fn new() -> Self {
         let passengers = Passengers {
             kind: PASSENGER_COUNT_KIND,
@@ -70,7 +70,7 @@ impl PriceRequest {
             solutions: None
         };
 
-        PriceRequest {
+        SearchRequest {
             request: request
         }
     }
@@ -95,7 +95,7 @@ impl PriceRequest {
         json::encode(self).map_err(|_| Error::EncodingJson )
     }
 
-    pub fn call(&self, api_key: &str) -> Result<PriceResponse, Error> {
+    pub fn call(&self, api_key: &str) -> Result<SearchResponse, Error> {
         let url = SEARCH_URL.to_string() + "?key=" + api_key;
         let request_body = try!(self.to_json());
 
