@@ -11,6 +11,7 @@ const DEFAULT_FILE_PATH: &'static str = "config.toml";
 pub struct Config {
     pub email: Option<String>,
     pub google_api_key: String,
+    pub requests_per_day: u8,
     pub trips: Vec<Trip>
 }
 
