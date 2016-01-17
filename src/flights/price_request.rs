@@ -52,17 +52,7 @@ struct Slice {
 }
 
 impl PriceRequest {
-    pub fn new(origin: &str, destination: &str, date: &str, max_stops: u8) -> Self {
-        let slice = Slice {
-            kind: SLICE_KIND,
-            origin: origin.to_string(),
-            destination: destination.to_string(),
-            date: date.to_string(),
-            maxStops: max_stops,
-            maxConnectionDuration: None,
-            preferredCabin: None
-        };
-
+    pub fn new() -> Self {
         let passengers = Passengers {
             kind: PASSENGER_COUNT_KIND,
             adultCount: 1,
@@ -73,7 +63,7 @@ impl PriceRequest {
 
         let request = Request {
             passengers: passengers,
-            slice: vec!(slice),
+            slice: vec!(),
             maxPrice: None,
             saleCountry: None,
             refundable: None,
@@ -83,20 +73,6 @@ impl PriceRequest {
         PriceRequest {
             request: request
         }
-    }
-
-    pub fn add_rountrip(&mut self, date: &str) -> &mut Self {
-        let mut roundtrip: Slice = self.request.slice.first().unwrap().clone();
-        let new_origin = roundtrip.destination;
-        let new_destination = roundtrip.origin;
-
-        roundtrip.origin = new_origin;
-        roundtrip.destination = new_destination;
-        roundtrip.date = date.to_string();
-
-        self.request.slice.push(roundtrip);
-
-        self
     }
 
     pub fn add_trip(&mut self, origin: &str, destination: &str, date: &str, max_stops: u8) -> &mut Self {
