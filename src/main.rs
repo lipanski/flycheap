@@ -12,8 +12,20 @@ fn main() {
     request.add_trip("TXL", "OTP", "2016-03-28", 0);
     request.add_trip("OTP", "TXL", "2016-04-03", 0);
 
-    // let offers = request.call(&config.google_api_key).unwrap();
-    // for offer in &offers {
-    //     println!("{}", offer);
-    // }
+    let offers = request.call(&config.google_api_key).unwrap();
+    for offer in &offers {
+        println!("{}", offer);
+    }
+
+    // TODO: request all possible trip combinations
+
+    // TODO: store all returned options
+
+    // TODO: if any price < total average => deliver report (mailgun?)
+
+    // TODO: determine when the next set of calls should be placed
+
+    // TODO: sleep til the next moment
+
+    // TODO: daily / weekly report
 }

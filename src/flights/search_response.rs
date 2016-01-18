@@ -112,10 +112,10 @@ impl TripOption {
 
         let pricing = try!(self.pricing.get(0).ok_or(Error::NoPricing));
 
-        let (base_price, _) = try!(money::parse(&pricing.baseFareTotal).map_err(|_| Error::ParsingPrice));
-        let (sale_price, _) = try!(money::parse(&pricing.saleFareTotal).map_err(|_| Error::ParsingPrice));
-        let (tax_price, _) = try!(money::parse(&pricing.saleTaxTotal).map_err(|_| Error::ParsingPrice));
-        let (total_price, currency) = try!(money::parse(&pricing.saleTotal).map_err(|_| Error::ParsingPrice));
+        let (base_price, _) = try!(money::parse(&pricing.baseFareTotal));
+        let (sale_price, _) = try!(money::parse(&pricing.saleFareTotal));
+        let (tax_price, _) = try!(money::parse(&pricing.saleTaxTotal));
+        let (total_price, currency) = try!(money::parse(&pricing.saleTotal));
 
         let offer = Offer {
             id: None,

@@ -24,5 +24,5 @@ pub enum Error {
     DecodingJson(String),
     NoPricing,
     NoFlights,
-    ParsingPrice
+    ParsingMoney
 }
