@@ -13,4 +13,6 @@ default = ["mockito/use_hyper"]
 toml = "0.1.25"
 rustc-serialize = "0.3.16"
 hyper = "0.7.2"
+regex = "0.1.47"
+rusqlite = "0.6.0"
 mockito = "0.1.4"

@@ -15,5 +15,6 @@ pub enum Error {
     ResponseNotOk,
     DecodingJson(String),
     NoPricing,
-    NoFlights
+    NoFlights,
+    ParsingPrice
 }

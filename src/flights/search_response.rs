@@ -1,3 +1,4 @@
+use money;
 use flights::{Offer, Error};
 use flights::Flight as OfferFlight;
 
@@ -10,7 +11,10 @@ impl SearchResponse {
     pub fn to_offers(self) -> Result<Vec<Offer>, Error> {
         let mut offers = vec!();
         for option in self.trips.tripOption {
-            offers.push(try!(option.to_offer()));
+            match option.to_offer() {
+                Ok(offer) => offers.push(offer),
+                _ => {}
+            };
         }
 
         Ok(offers)
@@ -86,8 +90,10 @@ impl TripOption {
 
                 for leg in segment.leg {
                     let flight = OfferFlight {
-                        from: leg.origin,
-                        to: leg.destination,
+                        id: None,
+                        offer_id: None,
+                        origin: leg.origin,
+                        destination: leg.destination,
                         departure_time: leg.departureTime,
                         arrival_time: leg.arrivalTime,
                         duration: leg.duration,
@@ -105,11 +111,18 @@ impl TripOption {
 
         let pricing = try!(self.pricing.get(0).ok_or(Error::NoPricing));
 
+        let (base_price, _) = try!(money::parse(&pricing.baseFareTotal).map_err(|_| Error::ParsingPrice));
+        let (sale_price, _) = try!(money::parse(&pricing.saleFareTotal).map_err(|_| Error::ParsingPrice));
+        let (tax_price, _) = try!(money::parse(&pricing.saleTaxTotal).map_err(|_| Error::ParsingPrice));
+        let (total_price, currency) = try!(money::parse(&pricing.saleTotal).map_err(|_| Error::ParsingPrice));
+
         let offer = Offer {
-            base_price: pricing.baseFareTotal.clone(),
-            sale_price: pricing.saleFareTotal.clone(),
-            tax_price: pricing.saleTaxTotal.clone(),
-            total_price: pricing.saleTotal.clone(),
+            id: None,
+            currency: currency.to_string(),
+            base_price: base_price,
+            sale_price: sale_price,
+            tax_price: tax_price,
+            total_price: total_price,
             latest_ticketing_time: pricing.latestTicketingTime.clone(),
             refundable: pricing.refundable.unwrap_or(false),
             flights: flights

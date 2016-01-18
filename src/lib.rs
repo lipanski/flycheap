@@ -1,10 +1,13 @@
 extern crate toml;
 extern crate rustc_serialize;
 extern crate hyper;
+extern crate regex;
+extern crate rusqlite;
 extern crate mockito;
 
 pub mod config;
 pub mod flights;
+pub mod money;
 
 pub type Config = config::Config;
 
@@ -12,5 +15,6 @@ pub type Config = config::Config;
 pub enum Error {
     LoadingConfig,
     ReadingConfig,
-    ParsingConfig
+    ParsingConfig,
+    EstablishingDbConnection
 }
