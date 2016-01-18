@@ -7,7 +7,7 @@ use hyper::status::StatusCode;
 use mockito::url::Url;
 
 use flights::{SearchResponse, Offer};
-use flights::Error;
+use Error;
 
 const SEARCH_URL: &'static str = "https://www.googleapis.com/qpxExpress/v1/trips/search";
 const PASSENGER_COUNT_KIND: &'static str = "qpxexpress#passengerCounts";

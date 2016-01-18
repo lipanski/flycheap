@@ -1,7 +1,7 @@
 use std::fmt::{Display, Formatter};
 use std::fmt::Result as FmtResult;
 
-use flights::Error;
+use Error;
 
 pub struct Offer {
     pub id: Option<u32>,

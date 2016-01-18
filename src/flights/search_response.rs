@@ -1,5 +1,6 @@
 use money;
-use flights::{Offer, Error};
+use Error;
+use flights::Offer;
 use flights::Flight as OfferFlight;
 
 #[derive(RustcDecodable)]

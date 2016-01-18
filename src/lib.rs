@@ -16,5 +16,13 @@ pub enum Error {
     LoadingConfig,
     ReadingConfig,
     ParsingConfig,
-    EstablishingDbConnection
+    EstablishingDbConnection,
+    EncodingJson,
+    SendingRequest,
+    ReadingResponse,
+    ResponseNotOk,
+    DecodingJson(String),
+    NoPricing,
+    NoFlights,
+    ParsingPrice
 }
