@@ -1,6 +1,20 @@
+use flights::{Offer, Error};
+use flights::Flight as OfferFlight;
+
 #[derive(RustcDecodable)]
 pub struct SearchResponse {
     pub trips: Trips
+}
+
+impl SearchResponse {
+    pub fn to_offers(self) -> Result<Vec<Offer>, Error> {
+        let mut offers = vec!();
+        for option in self.trips.tripOption {
+            offers.push(try!(option.to_offer()));
+        }
+
+        Ok(offers)
+    }
 }
 
 #[derive(RustcDecodable)]
@@ -58,6 +72,51 @@ pub struct TripOption {
     pub id: String,
     pub slice: Vec<Slice>,
     pub pricing: Vec<Pricing>
+}
+
+impl TripOption {
+    pub fn to_offer(self) -> Result<Offer, Error> {
+        let mut flights: Vec<OfferFlight> = vec!();
+
+        for slice in self.slice {
+            for segment in slice.segment {
+                let carrier = &segment.flight.carrier;
+                let number = &segment.flight.number;
+                let seat = &segment.cabin;
+
+                for leg in segment.leg {
+                    let flight = OfferFlight {
+                        from: leg.origin,
+                        to: leg.destination,
+                        departure_time: leg.departureTime,
+                        arrival_time: leg.arrivalTime,
+                        duration: leg.duration,
+                        mileage: leg.mileage,
+                        seat: seat.to_string(),
+                        aircraft: leg.aircraft,
+                        carrier: carrier.to_string(),
+                        number: number.to_string()
+                    };
+
+                    flights.push(flight);
+                }
+            }
+        }
+
+        let pricing = try!(self.pricing.get(0).ok_or(Error::NoPricing));
+
+        let offer = Offer {
+            base_price: pricing.baseFareTotal.clone(),
+            sale_price: pricing.saleFareTotal.clone(),
+            tax_price: pricing.saleTaxTotal.clone(),
+            total_price: pricing.saleTotal.clone(),
+            latest_ticketing_time: pricing.latestTicketingTime.clone(),
+            refundable: pricing.refundable.unwrap_or(false),
+            flights: flights
+        };
+
+        Ok(offer)
+    }
 }
 
 #[derive(RustcDecodable)]

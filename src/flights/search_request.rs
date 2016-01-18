@@ -6,7 +6,7 @@ use hyper::header::{Connection, ContentType};
 use hyper::status::StatusCode;
 use mockito::url::Url;
 
-use flights::SearchResponse;
+use flights::{SearchResponse, Offer};
 use flights::Error;
 
 const SEARCH_URL: &'static str = "https://www.googleapis.com/qpxExpress/v1/trips/search";
@@ -95,7 +95,7 @@ impl SearchRequest {
         json::encode(self).map_err(|_| Error::EncodingJson )
     }
 
-    pub fn call(&self, api_key: &str) -> Result<SearchResponse, Error> {
+    pub fn call(&self, api_key: &str) -> Result<Vec<Offer>, Error> {
         let url = SEARCH_URL.to_string() + "?key=" + api_key;
         let request_body = try!(self.to_json());
 
@@ -112,8 +112,8 @@ impl SearchRequest {
 
         match response.status {
             StatusCode::Ok => {
-                let price_response = try!(json::decode(&body).map_err(|_| Error::DecodingJson(body)));
-                Ok(price_response)
+                let price_response: SearchResponse = try!(json::decode(&body).map_err(|_| Error::DecodingJson(body)));
+                price_response.to_offers()
             },
             _ => Err(Error::ResponseNotOk)
         }

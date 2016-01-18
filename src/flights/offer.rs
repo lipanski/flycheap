@@ -1,5 +1,4 @@
-use flights::search_response::TripOption;
-use flights::Error;
+use std::fmt::{Display, Formatter, Result};
 
 pub struct Offer {
     pub base_price: String,
@@ -24,20 +23,17 @@ pub struct Flight {
     pub number: String
 }
 
-impl Offer {
-    pub fn from(option: TripOption) -> Result<Self, Error> {
-        let pricing = try!(option.pricing.get(0).ok_or(Error::NoPricing));
+impl Display for Offer {
+    fn fmt(&self, f: &mut Formatter) -> Result {
+        try!(writeln!(f, "PRICE: {}", self.total_price));
+        try!(writeln!(f, "SALE: {} / TAX: {} / REFUNDABLE: {} / LATEST: {}", self.base_price, self.tax_price, self.refundable, self.latest_ticketing_time));
 
-        let offer = Offer {
-            base_price: pricing.baseFareTotal.clone(),
-            sale_price: pricing.saleFareTotal.clone(),
-            tax_price: pricing.saleTaxTotal.clone(),
-            total_price: pricing.saleTotal.clone(),
-            latest_ticketing_time: pricing.latestTicketingTime.clone(),
-            refundable: pricing.refundable.unwrap_or(false),
-            flights: vec!()
-        };
+        for flight in &self.flights {
+            try!(writeln!(f, "---"));
+            try!(writeln!(f, "{}{} / {}", flight.carrier, flight.number, flight.seat));
+            try!(writeln!(f, "{} ({}) ---> {} ({})", flight.from, flight.departure_time, flight.to, flight.arrival_time));
+        }
 
-        Ok(offer)
+        Ok(())
     }
 }
