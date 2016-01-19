@@ -40,17 +40,17 @@ impl Config {
         self.trips.iter().fold(1, |acc, trip| acc * trip.dates.len())
     }
 
-    pub fn db_connection(&self) -> Result<Connection, Error> {
+    pub fn db_connection() -> Result<Connection, Error> {
         Connection::open(DEFAULT_DB_PATH).map_err(|_| Error::EstablishingDbConnection)
     }
 
     pub fn db_setup(&self) {
-        let conn = self.db_connection().unwrap();
+        let conn = Self::db_connection().unwrap();
 
         let create_offers = conn.execute("CREATE TABLE IF NOT EXISTS offers (id INTEGER PRIMARY KEY, currency TEXT NOT NULL, base_price REAL NOT NULL, sale_price REAL NOT NULL, tax_price REAL NOT NULL, total_price REAL NOT NULL, latest_ticketing_time TEXT NOT NULL, refundable INTEGER NOT NULL)", &[]);
         create_offers.unwrap();
 
-        let create_flights = conn.execute("CREATE TABLE IF NOT EXISTS flights (id INTEGER PRIMARY KEY, offer_id INTEGER NOT NULL, origin TEXT NOT NULL, destination TEXT NOT NULL, departure_time TEXT NOT NULL, arrival_time TEXT NOT NULL, duration INTEGER NOT NULL, mileage INTEGER NOT NULL, seat TEXT NOT NULL, aircraft TEXT NOT NULL, carrier TEXT NOT NULL)", &[]);
+        let create_flights = conn.execute("CREATE TABLE IF NOT EXISTS flights (id INTEGER PRIMARY KEY, offer_id INTEGER NOT NULL, origin TEXT NOT NULL, destination TEXT NOT NULL, departure_time TEXT NOT NULL, arrival_time TEXT NOT NULL, duration INTEGER NOT NULL, mileage INTEGER NOT NULL, seat TEXT NOT NULL, aircraft TEXT NOT NULL, carrier TEXT NOT NULL, number TEXT NOT NULL)", &[]);
         create_flights.unwrap();
     }
 

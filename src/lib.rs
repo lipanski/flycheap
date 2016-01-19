@@ -17,6 +17,8 @@ pub enum Error {
     ReadingConfig,
     ParsingConfig,
     EstablishingDbConnection,
+    PreparingDbQuery(String),
+    ExecutingDbQuery(String),
     EncodingJson,
     SendingRequest,
     ReadingResponse,
@@ -24,5 +26,5 @@ pub enum Error {
     DecodingJson(String),
     NoPricing,
     NoFlights,
-    ParsingMoney
+    ParsingMoney(String)
 }

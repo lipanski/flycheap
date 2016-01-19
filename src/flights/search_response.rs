@@ -135,21 +135,21 @@ impl TripOption {
 
 #[derive(RustcDecodable)]
 pub struct Slice {
-    pub duration: u32,
+    pub duration: i64,
     pub segment: Vec<Segment>
 }
 
 #[derive(RustcDecodable)]
 #[allow(non_snake_case)]
 pub struct Segment {
-    pub duration: u32,
+    pub duration: i64,
     pub flight: Flight,
     pub id: String,
     pub cabin: String,
     pub bookingCode: String,
-    pub bookingCodeCount: u32,
+    pub bookingCodeCount: i64,
     pub leg: Vec<Leg>,
-    pub connectionDuration: Option<u32>
+    pub connectionDuration: Option<i64>
 }
 
 #[derive(RustcDecodable)]
@@ -161,8 +161,8 @@ pub struct Leg {
     pub departureTime: String,
     pub origin: String,
     pub destination: String,
-    pub duration: u32,
-    pub mileage: u32,
+    pub duration: i64,
+    pub mileage: i64,
     pub meal: Option<String>
 }
 
