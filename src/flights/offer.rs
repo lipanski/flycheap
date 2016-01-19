@@ -35,8 +35,29 @@ impl Offer {
     pub fn create(&mut self) -> Result<(), Error> {
         let conn = try!(Config::db_connection());
 
-        let mut sql = try!(conn.prepare("INSERT INTO offers (currency, base_price, sale_price, tax_price, total_price, latest_ticketing_time, refundable) VALUES (?, ?, ?, ?, ?, ?, ?)").map_err(|err| Error::PreparingDbQuery(err.to_string())));
-        try!(sql.execute(&[&self.currency, &self.base_price, &self.sale_price, &self.tax_price, &self.total_price, &self.latest_ticketing_time, &self.refundable]).map_err(|err| Error::ExecutingDbQuery(err.to_string())));
+        let mut sql = try!(conn.prepare(
+            "INSERT INTO offers
+                (
+                    currency,
+                    base_price,
+                    sale_price,
+                    tax_price,
+                    total_price,
+                    latest_ticketing_time,
+                    refundable
+                ) VALUES (?, ?, ?, ?, ?, ?, ?)"
+            ).map_err(|err| Error::PreparingDbQuery(err.to_string())));
+
+        try!(sql.execute(
+            &[
+                &self.currency,
+                &self.base_price,
+                &self.sale_price,
+                &self.tax_price,
+                &self.total_price,
+                &self.latest_ticketing_time,
+                &self.refundable
+            ]).map_err(|err| Error::ExecutingDbQuery(err.to_string())));
 
         self.id = Some(conn.last_insert_rowid());
 
@@ -53,8 +74,37 @@ impl Flight {
     pub fn create(&mut self) -> Result<(), Error> {
         let conn = try!(Config::db_connection());
 
-        let mut sql = try!(conn.prepare("INSERT INTO flights (offer_id, origin, destination, departure_time, arrival_time, duration, mileage, seat, aircraft, carrier, number) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)").map_err(|err| Error::PreparingDbQuery(err.to_string())));
-        try!(sql.execute(&[&self.offer_id, &self.origin, &self.destination, &self.departure_time, &self.arrival_time, &self.duration, &self.mileage, &self.seat, &self.aircraft, &self.carrier, &self.number]).map_err(|err| Error::ExecutingDbQuery(err.to_string())));
+        let mut sql = try!(conn.prepare(
+            "INSERT INTO flights
+                (
+                    offer_id,
+                    origin,
+                    destination,
+                    departure_time,
+                    arrival_time,
+                    duration,
+                    mileage,
+                    seat,
+                    aircraft,
+                    carrier,
+                    number
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+            ).map_err(|err| Error::PreparingDbQuery(err.to_string())));
+
+        try!(sql.execute(
+            &[
+                &self.offer_id,
+                &self.origin,
+                &self.destination,
+                &self.departure_time,
+                &self.arrival_time,
+                &self.duration,
+                &self.mileage,
+                &self.seat,
+                &self.aircraft,
+                &self.carrier,
+                &self.number
+            ]).map_err(|err| Error::ExecutingDbQuery(err.to_string())));
 
         self.id = Some(conn.last_insert_rowid());
 
