@@ -45,10 +45,38 @@ impl Config {
     }
 
     pub fn db_setup(&self, conn: &Connection) {
-        let create_offers = conn.execute("CREATE TABLE IF NOT EXISTS offers (id INTEGER PRIMARY KEY, currency TEXT NOT NULL, base_price REAL NOT NULL, sale_price REAL NOT NULL, tax_price REAL NOT NULL, total_price REAL NOT NULL, latest_ticketing_time TEXT NOT NULL, refundable INTEGER NOT NULL)", &[]);
+        let create_offers = conn.execute(
+            "CREATE TABLE IF NOT EXISTS offers
+            (
+                id INTEGER PRIMARY KEY,
+                currency TEXT NOT NULL,
+                base_price REAL NOT NULL,
+                sale_price REAL NOT NULL,
+                tax_price REAL NOT NULL,
+                total_price REAL NOT NULL,
+                latest_ticketing_time TEXT NOT NULL,
+                refundable INTEGER NOT NULL
+            )", &[]);
+
         create_offers.unwrap();
 
-        let create_flights = conn.execute("CREATE TABLE IF NOT EXISTS flights (id INTEGER PRIMARY KEY, offer_id INTEGER NOT NULL, origin TEXT NOT NULL, destination TEXT NOT NULL, departure_time TEXT NOT NULL, arrival_time TEXT NOT NULL, duration INTEGER NOT NULL, mileage INTEGER NOT NULL, seat TEXT NOT NULL, aircraft TEXT NOT NULL, carrier TEXT NOT NULL, number TEXT NOT NULL)", &[]);
+        let create_flights = conn.execute(
+            "CREATE TABLE IF NOT EXISTS flights
+            (
+                id INTEGER PRIMARY KEY,
+                offer_id INTEGER NOT NULL,
+                origin TEXT NOT NULL,
+                destination TEXT NOT NULL,
+                departure_time TEXT NOT NULL,
+                arrival_time TEXT NOT NULL,
+                duration INTEGER NOT NULL,
+                mileage INTEGER NOT NULL,
+                seat TEXT NOT NULL,
+                aircraft TEXT NOT NULL,
+                carrier TEXT NOT NULL,
+                number TEXT NOT NULL
+            )", &[]);
+
         create_flights.unwrap();
     }
 

@@ -34,8 +34,6 @@ pub struct Flight {
 
 impl Offer {
     pub fn create(&mut self, conn: &Connection) -> Result<(), Error> {
-        // let conn = try!(Config::db_connection());
-
         let transaction = try!(conn.transaction().map_err(|err| Error::CreatingTransaction(err.to_string())));
 
         let mut sql = try!(conn.prepare(
@@ -77,8 +75,6 @@ impl Offer {
 
 impl Flight {
     pub fn create(&mut self, conn: &Connection) -> Result<(), Error> {
-        // let conn = try!(Config::db_connection());
-
         let mut sql = try!(conn.prepare(
             "INSERT INTO flights
                 (
