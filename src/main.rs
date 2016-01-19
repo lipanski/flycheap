@@ -5,8 +5,9 @@ use fly_cheap::flights::SearchRequest;
 
 fn main() {
     let config = Config::load().unwrap();
+    let conn = Config::db_connection().unwrap();
 
-    config.db_setup();
+    config.db_setup(&conn);
 
     let mut request = SearchRequest::new();
     request.add_trip("TXL", "OTP", "2016-03-28", 0);
@@ -15,7 +16,7 @@ fn main() {
     let mut offers = request.call(&config.google_api_key).unwrap();
     for offer in &mut offers {
         println!("{}", offer);
-        offer.create().unwrap();
+        offer.create(&conn).unwrap();
     }
 
     // TODO: request all possible trip combinations

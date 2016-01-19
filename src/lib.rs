@@ -17,6 +17,8 @@ pub enum Error {
     ReadingConfig,
     ParsingConfig,
     EstablishingDbConnection,
+    CreatingTransaction(String),
+    CommitingTransaction(String),
     PreparingDbQuery(String),
     ExecutingDbQuery(String),
     EncodingJson,

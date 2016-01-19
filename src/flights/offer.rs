@@ -1,7 +1,8 @@
 use std::fmt::{Display, Formatter};
 use std::fmt::Result as FmtResult;
 
-use Config;
+use rusqlite::Connection;
+
 use Error;
 
 pub struct Offer {
@@ -32,8 +33,10 @@ pub struct Flight {
 }
 
 impl Offer {
-    pub fn create(&mut self) -> Result<(), Error> {
-        let conn = try!(Config::db_connection());
+    pub fn create(&mut self, conn: &Connection) -> Result<(), Error> {
+        // let conn = try!(Config::db_connection());
+
+        let transaction = try!(conn.transaction().map_err(|err| Error::CreatingTransaction(err.to_string())));
 
         let mut sql = try!(conn.prepare(
             "INSERT INTO offers
@@ -63,16 +66,18 @@ impl Offer {
 
         for flight in &mut self.flights {
             flight.offer_id = self.id;
-            try!(flight.create());
+            try!(flight.create(conn));
         }
+
+        try!(transaction.commit().map_err(|err| Error::CommitingTransaction(err.to_string())));
 
         Ok(())
     }
 }
 
 impl Flight {
-    pub fn create(&mut self) -> Result<(), Error> {
-        let conn = try!(Config::db_connection());
+    pub fn create(&mut self, conn: &Connection) -> Result<(), Error> {
+        // let conn = try!(Config::db_connection());
 
         let mut sql = try!(conn.prepare(
             "INSERT INTO flights

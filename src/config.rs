@@ -44,9 +44,7 @@ impl Config {
         Connection::open(DEFAULT_DB_PATH).map_err(|_| Error::EstablishingDbConnection)
     }
 
-    pub fn db_setup(&self) {
-        let conn = Self::db_connection().unwrap();
-
+    pub fn db_setup(&self, conn: &Connection) {
         let create_offers = conn.execute("CREATE TABLE IF NOT EXISTS offers (id INTEGER PRIMARY KEY, currency TEXT NOT NULL, base_price REAL NOT NULL, sale_price REAL NOT NULL, tax_price REAL NOT NULL, total_price REAL NOT NULL, latest_ticketing_time TEXT NOT NULL, refundable INTEGER NOT NULL)", &[]);
         create_offers.unwrap();
 
