@@ -16,6 +16,14 @@ fn main() {
         }
     }
 
+    // TODO: store dates as unix timestamps
+
+    // TODO: chose currency via config file (?)
+
+    // TODO: store request dates
+
+    // TODO: store requests & add a name
+
     // TODO: rename config to session
 
     // TODO: if any price < total average => deliver report (mailgun?)
