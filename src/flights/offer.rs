@@ -27,7 +27,9 @@ pub struct Flight {
     pub origin: String,
     pub destination: String,
     pub departure_time: Timespec,
+    pub departure_utcoff: i64,
     pub arrival_time: Timespec,
+    pub arrival_utcoff: i64,
     pub duration: i64,
     pub mileage: i64,
     pub seat: String,
@@ -86,14 +88,16 @@ impl Flight {
                     origin,
                     destination,
                     departure_time,
+                    departure_utcoff,
                     arrival_time,
+                    arrival_utcoff,
                     duration,
                     mileage,
                     seat,
                     aircraft,
                     carrier,
                     number
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
             ).map_err(|err| Error::PreparingDbQuery(err.to_string())));
 
         try!(sql.execute(
@@ -102,7 +106,9 @@ impl Flight {
                 &self.origin,
                 &self.destination,
                 &self.departure_time,
+                &self.departure_utcoff,
                 &self.arrival_time,
+                &self.arrival_utcoff,
                 &self.duration,
                 &self.mileage,
                 &self.seat,
@@ -120,10 +126,10 @@ impl Flight {
 impl Display for Offer {
     fn fmt(&self, f: &mut Formatter) -> FmtResult {
         try!(write!(f, "PRICE: {}{}", self.total_price, self.currency));
-        try!(writeln!(f, " ({} + {}) / REFUNDABLE: {} / LATEST: {}", self.base_price, self.tax_price, self.refundable, format_time(self.latest_ticketing_time)));
+        try!(writeln!(f, " ({} + {}) / REFUNDABLE: {} / LATEST: {}", self.base_price, self.tax_price, self.refundable, format_time(self.latest_ticketing_time, None)));
 
         for flight in &self.flights {
-            try!(write!(f, "{}, {} ---> {}, {}", flight.origin, format_time(flight.departure_time), flight.destination, format_time(flight.arrival_time)));
+            try!(write!(f, "{}, {} ---> {}, {}", flight.origin, format_time(flight.departure_time, Some(flight.departure_utcoff)), flight.destination, format_time(flight.arrival_time, Some(flight.arrival_utcoff))));
             try!(writeln!(f, " ({}{}, {})", flight.carrier, flight.number, flight.seat));
         }
 
@@ -131,6 +137,10 @@ impl Display for Offer {
     }
 }
 
-fn format_time(time: Timespec) -> String {
-    time::at(time).strftime(TIME_FORMAT).unwrap().to_string()
+fn format_time(timespec: Timespec, utc_offset: Option<i64>) -> String {
+    let mut time = time::at(timespec);
+
+    if utc_offset.is_some() { time.tm_utcoff = utc_offset.unwrap() as i32; }
+
+    time.strftime(TIME_FORMAT).unwrap().to_string()
 }

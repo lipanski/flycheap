@@ -146,13 +146,18 @@ impl TripOption {
                 let seat = &segment.cabin;
 
                 for leg in segment.leg {
+                    let departure_time = try!(parse_time(leg.departureTime));
+                    let arrival_time = try!(parse_time(leg.arrivalTime));
+
                     let flight = OfferFlight {
                         id: None,
                         offer_id: None,
                         origin: leg.origin,
                         destination: leg.destination,
-                        departure_time: try!(parse_time(leg.departureTime)).to_timespec(),
-                        arrival_time: try!(parse_time(leg.arrivalTime)).to_timespec(),
+                        departure_time: departure_time.to_timespec(),
+                        departure_utcoff: departure_time.tm_utcoff as i64,
+                        arrival_time: arrival_time.to_timespec(),
+                        arrival_utcoff: arrival_time.tm_utcoff as i64,
                         duration: leg.duration,
                         mileage: leg.mileage,
                         seat: seat.to_string(),
