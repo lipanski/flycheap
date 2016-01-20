@@ -1,27 +1,22 @@
 extern crate fly_cheap;
 
 use fly_cheap::Config;
-use fly_cheap::flights::SearchRequest;
 
 fn main() {
     let config = Config::load().unwrap();
-    let conn = Config::db_connection().unwrap();
 
+    let conn = Config::db_connection().unwrap();
     config.db_setup(&conn);
 
-    let mut request = SearchRequest::new();
-    request.add_trip("TXL", "OTP", "2016-03-28", 0);
-    request.add_trip("OTP", "TXL", "2016-04-03", 0);
-
-    let mut offers = request.call(&config.google_api_key).unwrap();
-    for offer in &mut offers {
-        println!("{}", offer);
-        offer.create(&conn).unwrap();
+    for request in config.search_requests() {
+        let mut offers = request.call(&config.google_api_key).unwrap();
+        for offer in &mut offers {
+            println!("{}", offer);
+            offer.create(&conn).unwrap();
+        }
     }
 
-    // TODO: request all possible trip combinations
-
-    // TODO: store all returned options
+    // TODO: rename config to session
 
     // TODO: if any price < total average => deliver report (mailgun?)
 
@@ -30,4 +25,6 @@ fn main() {
     // TODO: sleep til the next moment
 
     // TODO: daily / weekly report
+
+    // TODO: remove all unwrap calls + handle offer errros gracefully (?)
 }

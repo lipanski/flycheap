@@ -4,6 +4,7 @@ use std::io::Read;
 use toml::decode_str;
 use rusqlite::Connection;
 
+use flights::SearchRequest;
 use Error;
 
 const DEFAULT_CONFIG_PATH: &'static str = "config.toml";
@@ -36,6 +37,8 @@ impl Config {
 
     pub fn total_calls(&self) -> usize {
         if self.trips.len() == 0 { return 0 }
+
+        // TODO: count dates, not trips
 
         self.trips.iter().fold(1, |acc, trip| acc * trip.dates.len())
     }
@@ -82,5 +85,18 @@ impl Config {
 
     pub fn db_reset(&self) {
         remove_file(DEFAULT_DB_PATH).unwrap_or(());
+    }
+
+    pub fn search_requests(&self) -> Vec<SearchRequest> {
+        let mut requests: Vec<SearchRequest> = (0..self.total_calls()).map(|_| SearchRequest::new()).collect();
+
+        for trip in &self.trips {
+            let mut dates_iterator = trip.dates.iter().cycle();
+            for request in &mut requests {
+                request.add_trip(&trip.to, &trip.from, dates_iterator.next().unwrap(), 0);
+            }
+        }
+
+        requests
     }
 }

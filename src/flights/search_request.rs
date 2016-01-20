@@ -115,7 +115,7 @@ impl SearchRequest {
                 let price_response: SearchResponse = try!(json::decode(&body).map_err(|_| Error::DecodingJson(body)));
                 price_response.to_offers()
             },
-            _ => Err(Error::ResponseNotOk)
+            _ => Err(Error::ResponseNotOk(response.status.to_string()))
         }
     }
 }

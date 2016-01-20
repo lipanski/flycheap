@@ -24,7 +24,7 @@ pub enum Error {
     EncodingJson,
     SendingRequest,
     ReadingResponse,
-    ResponseNotOk,
+    ResponseNotOk(String),
     DecodingJson(String),
     NoPricing,
     NoFlights,
