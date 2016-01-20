@@ -16,8 +16,6 @@ fn main() {
         }
     }
 
-    // TODO: store dates as unix timestamps
-
     // TODO: chose currency via config file (?)
 
     // TODO: store request dates

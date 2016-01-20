@@ -1,9 +1,13 @@
 use std::fmt::{Display, Formatter};
 use std::fmt::Result as FmtResult;
 
+use time;
+use time::Timespec;
 use rusqlite::Connection;
 
 use Error;
+
+const TIME_FORMAT: &'static str = "%d.%m %H:%I";
 
 pub struct Offer {
     pub id: Option<i64>,
@@ -12,7 +16,7 @@ pub struct Offer {
     pub sale_price: f64,
     pub tax_price: f64,
     pub total_price: f64,
-    pub latest_ticketing_time: String,
+    pub latest_ticketing_time: Timespec,
     pub refundable: bool,
     pub flights: Vec<Flight>
 }
@@ -22,8 +26,8 @@ pub struct Flight {
     pub offer_id: Option<i64>,
     pub origin: String,
     pub destination: String,
-    pub departure_time: String,
-    pub arrival_time: String,
+    pub departure_time: Timespec,
+    pub arrival_time: Timespec,
     pub duration: i64,
     pub mileage: i64,
     pub seat: String,
@@ -116,14 +120,18 @@ impl Flight {
 impl Display for Offer {
     fn fmt(&self, f: &mut Formatter) -> FmtResult {
         try!(writeln!(f, "PRICE: {}", self.total_price));
-        try!(writeln!(f, "SALE: {} / TAX: {} / REFUNDABLE: {} / LATEST: {}", self.base_price, self.tax_price, self.refundable, self.latest_ticketing_time));
+        try!(writeln!(f, "SALE: {} / TAX: {} / REFUNDABLE: {} / LATEST: {}", self.base_price, self.tax_price, self.refundable, format_time(self.latest_ticketing_time)));
 
         for flight in &self.flights {
             try!(writeln!(f, "---"));
             try!(writeln!(f, "{}{} / {}", flight.carrier, flight.number, flight.seat));
-            try!(writeln!(f, "{} ({}) ---> {} ({})", flight.origin, flight.departure_time, flight.destination, flight.arrival_time));
+            try!(writeln!(f, "{} ({}) ---> {} ({})", flight.origin, format_time(flight.departure_time), flight.destination, format_time(flight.arrival_time)));
         }
 
         Ok(())
     }
+}
+
+fn format_time(time: Timespec) -> String {
+    time::at(time).strftime(TIME_FORMAT).unwrap().to_string()
 }

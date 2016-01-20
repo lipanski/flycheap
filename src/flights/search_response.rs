@@ -1,7 +1,11 @@
+use time::{strptime, Tm};
+
 use money;
 use Error;
 use flights::Offer;
 use flights::Flight as OfferFlight;
+
+const TIME_FORMAT: &'static str = "%Y-%m-%dT%H:%M%z";
 
 #[derive(RustcDecodable)]
 pub struct SearchResponse {
@@ -79,60 +83,6 @@ pub struct TripOption {
     pub pricing: Vec<Pricing>
 }
 
-impl TripOption {
-    pub fn to_offer(self) -> Result<Offer, Error> {
-        let mut flights: Vec<OfferFlight> = vec!();
-
-        for slice in self.slice {
-            for segment in slice.segment {
-                let carrier = &segment.flight.carrier;
-                let number = &segment.flight.number;
-                let seat = &segment.cabin;
-
-                for leg in segment.leg {
-                    let flight = OfferFlight {
-                        id: None,
-                        offer_id: None,
-                        origin: leg.origin,
-                        destination: leg.destination,
-                        departure_time: leg.departureTime,
-                        arrival_time: leg.arrivalTime,
-                        duration: leg.duration,
-                        mileage: leg.mileage,
-                        seat: seat.to_string(),
-                        aircraft: leg.aircraft,
-                        carrier: carrier.to_string(),
-                        number: number.to_string()
-                    };
-
-                    flights.push(flight);
-                }
-            }
-        }
-
-        let pricing = try!(self.pricing.get(0).ok_or(Error::NoPricing));
-
-        let (base_price, _) = try!(money::parse(&pricing.baseFareTotal));
-        let (sale_price, _) = try!(money::parse(&pricing.saleFareTotal));
-        let (tax_price, _) = try!(money::parse(&pricing.saleTaxTotal));
-        let (total_price, currency) = try!(money::parse(&pricing.saleTotal));
-
-        let offer = Offer {
-            id: None,
-            currency: currency.to_string(),
-            base_price: base_price,
-            sale_price: sale_price,
-            tax_price: tax_price,
-            total_price: total_price,
-            latest_ticketing_time: pricing.latestTicketingTime.clone(),
-            refundable: pricing.refundable.unwrap_or(false),
-            flights: flights
-        };
-
-        Ok(offer)
-    }
-}
-
 #[derive(RustcDecodable)]
 pub struct Slice {
     pub duration: i64,
@@ -183,4 +133,62 @@ pub struct Pricing {
     pub latestTicketingTime: String,
     pub ptc: String,
     pub refundable: Option<bool>
+}
+
+impl TripOption {
+    pub fn to_offer(self) -> Result<Offer, Error> {
+        let mut flights: Vec<OfferFlight> = vec!();
+
+        for slice in self.slice {
+            for segment in slice.segment {
+                let carrier = &segment.flight.carrier;
+                let number = &segment.flight.number;
+                let seat = &segment.cabin;
+
+                for leg in segment.leg {
+                    let flight = OfferFlight {
+                        id: None,
+                        offer_id: None,
+                        origin: leg.origin,
+                        destination: leg.destination,
+                        departure_time: try!(parse_time(leg.departureTime)).to_timespec(),
+                        arrival_time: try!(parse_time(leg.arrivalTime)).to_timespec(),
+                        duration: leg.duration,
+                        mileage: leg.mileage,
+                        seat: seat.to_string(),
+                        aircraft: leg.aircraft,
+                        carrier: carrier.to_string(),
+                        number: number.to_string()
+                    };
+
+                    flights.push(flight);
+                }
+            }
+        }
+
+        let pricing = try!(self.pricing.get(0).ok_or(Error::NoPricing));
+
+        let (base_price, _) = try!(money::parse(&pricing.baseFareTotal));
+        let (sale_price, _) = try!(money::parse(&pricing.saleFareTotal));
+        let (tax_price, _) = try!(money::parse(&pricing.saleTaxTotal));
+        let (total_price, currency) = try!(money::parse(&pricing.saleTotal));
+
+        let offer = Offer {
+            id: None,
+            currency: currency.to_string(),
+            base_price: base_price,
+            sale_price: sale_price,
+            tax_price: tax_price,
+            total_price: total_price,
+            latest_ticketing_time: try!(parse_time(pricing.latestTicketingTime.clone())).to_timespec(),
+            refundable: pricing.refundable.unwrap_or(false),
+            flights: flights
+        };
+
+        Ok(offer)
+    }
+}
+
+fn parse_time(time: String) -> Result<Tm, Error> {
+    strptime(&time, TIME_FORMAT).map_err(|_| Error::ParsingTime(time))
 }

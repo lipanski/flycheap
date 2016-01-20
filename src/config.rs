@@ -57,7 +57,7 @@ impl Config {
                 sale_price REAL NOT NULL,
                 tax_price REAL NOT NULL,
                 total_price REAL NOT NULL,
-                latest_ticketing_time TEXT NOT NULL,
+                latest_ticketing_time INTEGER NOT NULL,
                 refundable INTEGER NOT NULL
             )", &[]);
 
@@ -70,8 +70,8 @@ impl Config {
                 offer_id INTEGER NOT NULL,
                 origin TEXT NOT NULL,
                 destination TEXT NOT NULL,
-                departure_time TEXT NOT NULL,
-                arrival_time TEXT NOT NULL,
+                departure_time INTEGER NOT NULL,
+                arrival_time INTEGER NOT NULL,
                 duration INTEGER NOT NULL,
                 mileage INTEGER NOT NULL,
                 seat TEXT NOT NULL,

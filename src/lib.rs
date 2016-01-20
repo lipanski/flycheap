@@ -3,6 +3,7 @@ extern crate rustc_serialize;
 extern crate hyper;
 extern crate regex;
 extern crate rusqlite;
+extern crate time;
 extern crate mockito;
 
 pub mod config;
@@ -28,5 +29,7 @@ pub enum Error {
     DecodingJson(String),
     NoPricing,
     NoFlights,
-    ParsingMoney(String)
+    ParsingMoney(String),
+    ParsingTime(String),
+    FormattingTime
 }
