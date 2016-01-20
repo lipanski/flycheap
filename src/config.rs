@@ -15,6 +15,7 @@ pub struct Config {
     pub email: Option<String>,
     pub google_api_key: String,
     pub requests_per_day: u8,
+    pub sale_country: String,
     pub trips: Vec<Trip>
 }
 
@@ -88,7 +89,7 @@ impl Config {
     }
 
     pub fn search_requests(&self) -> Vec<SearchRequest> {
-        let mut requests: Vec<SearchRequest> = (0..self.total_calls()).map(|_| SearchRequest::new()).collect();
+        let mut requests: Vec<SearchRequest> = (0..self.total_calls()).map(|_| SearchRequest::new(&self.sale_country)).collect();
 
         for trip in &self.trips {
             let mut dates_iterator = trip.dates.iter().cycle();

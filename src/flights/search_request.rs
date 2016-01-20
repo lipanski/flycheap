@@ -52,7 +52,7 @@ struct Slice {
 }
 
 impl SearchRequest {
-    pub fn new() -> Self {
+    pub fn new(sale_country: &str) -> Self {
         let passengers = Passengers {
             kind: PASSENGER_COUNT_KIND,
             adultCount: 1,
@@ -65,7 +65,7 @@ impl SearchRequest {
             passengers: passengers,
             slice: vec!(),
             maxPrice: None,
-            saleCountry: None,
+            saleCountry: Some(sale_country.to_string()),
             refundable: None,
             solutions: None
         };

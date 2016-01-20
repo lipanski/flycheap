@@ -16,8 +16,6 @@ fn main() {
         }
     }
 
-    // TODO: chose currency via config file (?)
-
     // TODO: store request dates
 
     // TODO: store requests & add a name
