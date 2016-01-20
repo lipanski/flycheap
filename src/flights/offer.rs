@@ -119,13 +119,12 @@ impl Flight {
 
 impl Display for Offer {
     fn fmt(&self, f: &mut Formatter) -> FmtResult {
-        try!(writeln!(f, "PRICE: {}", self.total_price));
-        try!(writeln!(f, "SALE: {} / TAX: {} / REFUNDABLE: {} / LATEST: {}", self.base_price, self.tax_price, self.refundable, format_time(self.latest_ticketing_time)));
+        try!(write!(f, "PRICE: {}{}", self.total_price, self.currency));
+        try!(writeln!(f, " ({} + {}) / REFUNDABLE: {} / LATEST: {}", self.base_price, self.tax_price, self.refundable, format_time(self.latest_ticketing_time)));
 
         for flight in &self.flights {
-            try!(writeln!(f, "---"));
-            try!(writeln!(f, "{}{} / {}", flight.carrier, flight.number, flight.seat));
-            try!(writeln!(f, "{} ({}) ---> {} ({})", flight.origin, format_time(flight.departure_time), flight.destination, format_time(flight.arrival_time)));
+            try!(write!(f, "{}, {} ---> {}, {}", flight.origin, format_time(flight.departure_time), flight.destination, format_time(flight.arrival_time)));
+            try!(writeln!(f, " ({}{}, {})", flight.carrier, flight.number, flight.seat));
         }
 
         Ok(())
