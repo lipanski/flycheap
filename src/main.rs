@@ -1,6 +1,6 @@
-extern crate fly_cheap;
+extern crate flycheap;
 
-use fly_cheap::Session;
+use flycheap::Session;
 
 fn main() {
     let session = Session::load().unwrap();
