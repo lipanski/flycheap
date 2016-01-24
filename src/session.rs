@@ -40,8 +40,6 @@ impl Session {
     pub fn total_calls(&self) -> usize {
         if self.trips.len() == 0 { return 0 }
 
-        // TODO: count dates, not trips
-
         self.trips.iter().fold(1, |acc, trip| acc * trip.dates.len())
     }
 
@@ -70,7 +68,7 @@ impl Session {
                 sale_price REAL NOT NULL,
                 tax_price REAL NOT NULL,
                 total_price REAL NOT NULL,
-                latest_ticketing_time INTEGER NOT NULL,
+                latest_ticketing_at INTEGER NOT NULL,
                 refundable INTEGER NOT NULL
             )", &[]);
 
@@ -83,10 +81,10 @@ impl Session {
                 offer_id INTEGER NOT NULL,
                 origin TEXT NOT NULL,
                 destination TEXT NOT NULL,
-                departure_time INTEGER NOT NULL,
-                departure_utcoff INTEGER NOT NULL,
-                arrival_time INTEGER NOT NULL,
-                arrival_utcoff INTEGER NOT NULL,
+                departs_at INTEGER NOT NULL,
+                departs_at_offset INTEGER NOT NULL,
+                arrives_at INTEGER NOT NULL,
+                arrives_at_offset INTEGER NOT NULL,
                 duration INTEGER NOT NULL,
                 mileage INTEGER NOT NULL,
                 seat TEXT NOT NULL,

@@ -19,7 +19,7 @@ pub struct Offer {
     pub sale_price: f64,
     pub tax_price: f64,
     pub total_price: f64,
-    pub latest_ticketing_time: Timespec,
+    pub latest_ticketing_at: Timespec,
     pub refundable: bool,
     pub flights: Vec<Flight>
 }
@@ -29,10 +29,10 @@ pub struct Flight {
     pub offer_id: Option<i64>,
     pub origin: String,
     pub destination: String,
-    pub departure_time: Timespec,
-    pub departure_utcoff: i64,
-    pub arrival_time: Timespec,
-    pub arrival_utcoff: i64,
+    pub departs_at: Timespec,
+    pub departs_at_offset: i64,
+    pub arrives_at: Timespec,
+    pub arrives_at_offset: i64,
     pub duration: i64,
     pub mileage: i64,
     pub seat: String,
@@ -180,18 +180,18 @@ impl TripOption {
                 let seat = &segment.cabin;
 
                 for leg in segment.leg {
-                    let departure_time = try!(parse_time(leg.departureTime));
-                    let arrival_time = try!(parse_time(leg.arrivalTime));
+                    let departs_at = try!(parse_time(leg.departureTime));
+                    let arrives_at = try!(parse_time(leg.arrivalTime));
 
                     let flight = Flight {
                         id: None,
                         offer_id: None,
                         origin: leg.origin,
                         destination: leg.destination,
-                        departure_time: departure_time.to_timespec(),
-                        departure_utcoff: departure_time.tm_utcoff as i64,
-                        arrival_time: arrival_time.to_timespec(),
-                        arrival_utcoff: arrival_time.tm_utcoff as i64,
+                        departs_at: departs_at.to_timespec(),
+                        departs_at_offset: departs_at.tm_utcoff as i64,
+                        arrives_at: arrives_at.to_timespec(),
+                        arrives_at_offset: arrives_at.tm_utcoff as i64,
                         duration: leg.duration,
                         mileage: leg.mileage,
                         seat: seat.to_string(),
@@ -220,7 +220,7 @@ impl TripOption {
             sale_price: sale_price,
             tax_price: tax_price,
             total_price: total_price,
-            latest_ticketing_time: try!(parse_time(pricing.latestTicketingTime.clone())).to_timespec(),
+            latest_ticketing_at: try!(parse_time(pricing.latestTicketingTime.clone())).to_timespec(),
             refundable: pricing.refundable.unwrap_or(false),
             flights: flights
         };
@@ -248,7 +248,7 @@ impl Offer {
                     sale_price,
                     tax_price,
                     total_price,
-                    latest_ticketing_time,
+                    latest_ticketing_at,
                     refundable
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
             ).map_err(|err| Error::PreparingDbQuery(err.to_string())));
@@ -261,7 +261,7 @@ impl Offer {
                 &self.sale_price,
                 &self.tax_price,
                 &self.total_price,
-                &self.latest_ticketing_time,
+                &self.latest_ticketing_at,
                 &self.refundable
             ]).map_err(|err| Error::ExecutingDbQuery(err.to_string())));
 
@@ -286,10 +286,10 @@ impl Flight {
                     offer_id,
                     origin,
                     destination,
-                    departure_time,
-                    departure_utcoff,
-                    arrival_time,
-                    arrival_utcoff,
+                    departs_at,
+                    departs_at_offset,
+                    arrives_at,
+                    arrives_at_offset,
                     duration,
                     mileage,
                     seat,
@@ -304,10 +304,10 @@ impl Flight {
                 &self.offer_id,
                 &self.origin,
                 &self.destination,
-                &self.departure_time,
-                &self.departure_utcoff,
-                &self.arrival_time,
-                &self.arrival_utcoff,
+                &self.departs_at,
+                &self.departs_at_offset,
+                &self.arrives_at,
+                &self.arrives_at_offset,
                 &self.duration,
                 &self.mileage,
                 &self.seat,
@@ -325,10 +325,10 @@ impl Flight {
 impl Display for Offer {
     fn fmt(&self, f: &mut Formatter) -> FmtResult {
         try!(write!(f, "PRICE: {}{}", self.total_price, self.currency));
-        try!(writeln!(f, " ({} + {}) / REFUNDABLE: {} / LATEST: {}", self.base_price, self.tax_price, self.refundable, format_time(self.latest_ticketing_time, None)));
+        try!(writeln!(f, " ({} + {}) / REFUNDABLE: {} / LATEST: {}", self.base_price, self.tax_price, self.refundable, format_time(self.latest_ticketing_at, None)));
 
         for flight in &self.flights {
-            try!(write!(f, "{}, {} ---> {}, {}", flight.origin, format_time(flight.departure_time, Some(flight.departure_utcoff)), flight.destination, format_time(flight.arrival_time, Some(flight.arrival_utcoff))));
+            try!(write!(f, "{}, {} ---> {}, {}", flight.origin, format_time(flight.departs_at, Some(flight.departs_at_offset)), flight.destination, format_time(flight.arrives_at, Some(flight.arrives_at_offset))));
             try!(writeln!(f, " ({}{}, {})", flight.carrier, flight.number, flight.seat));
         }
 

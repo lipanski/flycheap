@@ -16,15 +16,17 @@ fn main() {
         }
     }
 
-    // TODO: rename arrival_time to arrives_at (same for departure_time)
-
     // TODO: if any price < total average => deliver report (mailgun?)
 
     // TODO: determine when the next set of calls should be placed
 
     // TODO: sleep til the next moment
 
+    // TODO: count dates, not trips
+
     // TODO: daily / weekly report
+
+    // TODO: save config (?) & db to home folder
 
     // TODO: remove all unwrap calls + handle offer errros gracefully (?)
 }
