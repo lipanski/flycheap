@@ -22,6 +22,7 @@ pub enum Error {
     CommitingTransaction(String),
     PreparingDbQuery(String),
     ExecutingDbQuery(String),
+    NoIdAssigned,
     EncodingJson,
     SendingRequest,
     ReadingResponse,

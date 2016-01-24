@@ -129,8 +129,12 @@ impl Request {
 
         match response.status {
             StatusCode::Ok => {
-                self.create(&try!(Session::db_connection()));
-                Offer::from_json(body, self.id)
+                let conn = try!(Session::db_connection());
+                try!(self.create(&conn));
+
+                let request_id = try!(self.id.ok_or(Error::NoIdAssigned));
+
+                Offer::from_json(body, request_id)
             },
             _ => Err(Error::ResponseNotOk(response.status.to_string()))
         }
@@ -154,5 +158,10 @@ impl Request {
         self.id = Some(conn.last_insert_rowid());
 
         Ok(())
+    }
+
+    pub fn requests_in_the_past_24_hours() -> Result<Vec<Self>, Error> {
+
+        Ok(vec!())
     }
 }

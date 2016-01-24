@@ -62,7 +62,7 @@ impl Session {
             "CREATE TABLE IF NOT EXISTS offers
             (
                 id INTEGER PRIMARY KEY,
-                request_id INTEGER,
+                request_id INTEGER NOT NULL,
                 currency TEXT NOT NULL,
                 base_price REAL NOT NULL,
                 sale_price REAL NOT NULL,

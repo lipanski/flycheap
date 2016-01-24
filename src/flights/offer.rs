@@ -13,7 +13,7 @@ const ISO_TIME_FORMAT: &'static str = "%Y-%m-%dT%H:%M%z";
 
 pub struct Offer {
     pub id: Option<i64>,
-    pub request_id: Option<i64>,
+    pub request_id: i64,
     pub currency: String,
     pub base_price: f64,
     pub sale_price: f64,
@@ -47,7 +47,7 @@ struct SearchResponse {
 }
 
 impl SearchResponse {
-    pub fn to_offers(self, request_id: &Option<i64>) -> Result<Vec<Offer>, Error> {
+    pub fn to_offers(self, request_id: &i64) -> Result<Vec<Offer>, Error> {
         let mut offers = vec!();
         for option in self.trips.tripOption {
             match option.to_offer(request_id) {
@@ -170,7 +170,7 @@ struct Pricing {
 }
 
 impl TripOption {
-    pub fn to_offer(self, request_id: &Option<i64>) -> Result<Offer, Error> {
+    pub fn to_offer(self, request_id: &i64) -> Result<Offer, Error> {
         let mut flights: Vec<Flight> = vec!();
 
         for slice in self.slice {
@@ -230,7 +230,7 @@ impl TripOption {
 }
 
 impl Offer {
-    pub fn from_json(json: String, request_id: Option<i64>) -> Result<Vec<Self>, Error> {
+    pub fn from_json(json: String, request_id: i64) -> Result<Vec<Self>, Error> {
         let price_response: SearchResponse = try!(json::decode(&json).map_err(|_| Error::DecodingJson(json)));
 
         price_response.to_offers(&request_id)
