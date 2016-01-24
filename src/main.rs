@@ -8,7 +8,7 @@ fn main() {
     let conn = Session::db_connection().unwrap();
     session.db_setup(&conn);
 
-    for request in session.search_requests() {
+    for mut request in session.requests() {
         let mut offers = request.call(&session.google_api_key).unwrap();
         for offer in &mut offers {
             println!("{}", offer);
@@ -16,9 +16,7 @@ fn main() {
         }
     }
 
-    // TODO: store request dates
-
-    // TODO: store requests & add a name
+    // TODO: rename arrival_time to arrives_at (same for departure_time)
 
     // TODO: if any price < total average => deliver report (mailgun?)
 

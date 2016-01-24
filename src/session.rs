@@ -4,7 +4,7 @@ use std::io::Read;
 use toml::decode_str;
 use rusqlite::Connection;
 
-use flights::SearchRequest;
+use flights::Request;
 use Error;
 
 const DEFAULT_CONFIG_PATH: &'static str = "config.toml";
@@ -16,6 +16,7 @@ pub struct Session {
     pub google_api_key: String,
     pub requests_per_day: u8,
     pub sale_country: String,
+    pub request_name: String,
     pub trips: Vec<Trip>
 }
 
@@ -49,10 +50,21 @@ impl Session {
     }
 
     pub fn db_setup(&self, conn: &Connection) {
+        let create_requests = conn.execute(
+            "CREATE TABLE IF NOT EXISTS requests
+            (
+                id INTEGER PRIMARY KEY,
+                name TEXT NOT NULL,
+                created_at INTEGER NOT NULL
+            )", &[]);
+
+        create_requests.unwrap();
+
         let create_offers = conn.execute(
             "CREATE TABLE IF NOT EXISTS offers
             (
                 id INTEGER PRIMARY KEY,
+                request_id INTEGER,
                 currency TEXT NOT NULL,
                 base_price REAL NOT NULL,
                 sale_price REAL NOT NULL,
@@ -90,8 +102,10 @@ impl Session {
         remove_file(DEFAULT_DB_PATH).unwrap_or(());
     }
 
-    pub fn search_requests(&self) -> Vec<SearchRequest> {
-        let mut requests: Vec<SearchRequest> = (0..self.total_calls()).map(|_| SearchRequest::new(&self.sale_country)).collect();
+    pub fn requests(&self) -> Vec<Request> {
+        let mut requests: Vec<Request> = (0..self.total_calls()).map(|_| {
+            Request::new(&self.request_name, &self.sale_country)
+        }).collect();
 
         for trip in &self.trips {
             let mut dates_iterator = trip.dates.iter().cycle();

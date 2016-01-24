@@ -5,22 +5,32 @@ use hyper::Client;
 use hyper::header::{Connection, ContentType};
 use hyper::status::StatusCode;
 use mockito::url::Url;
+use time::{now_utc, Timespec};
+use rusqlite::Connection as DbConnection;
 
-use flights::{SearchResponse, Offer};
+use flights::Offer;
+use Session;
 use Error;
 
 const SEARCH_URL: &'static str = "https://www.googleapis.com/qpxExpress/v1/trips/search";
 const PASSENGER_COUNT_KIND: &'static str = "qpxexpress#passengerCounts";
 const SLICE_KIND: &'static str = "qpxexpress#sliceInput";
 
+pub struct Request {
+    pub id: Option<i64>,
+    pub name: String,
+    pub created_at: Timespec,
+    google_search_request: GoogleSearchRequest
+}
+
 #[derive(RustcEncodable)]
-pub struct SearchRequest {
-    request: Request
+struct GoogleSearchRequest {
+    request: GoogleRequest
 }
 
 #[derive(RustcEncodable)]
 #[allow(non_snake_case)]
-struct Request {
+struct GoogleRequest {
     passengers: Passengers,
     slice: Vec<Slice>,
     maxPrice: Option<String>,
@@ -51,8 +61,8 @@ struct Slice {
     preferredCabin: Option<String>
 }
 
-impl SearchRequest {
-    pub fn new(sale_country: &str) -> Self {
+impl Request {
+    pub fn new(name: &str, sale_country: &str) -> Self {
         let passengers = Passengers {
             kind: PASSENGER_COUNT_KIND,
             adultCount: 1,
@@ -61,7 +71,7 @@ impl SearchRequest {
             seniorCount: 0
         };
 
-        let request = Request {
+        let request = GoogleRequest {
             passengers: passengers,
             slice: vec!(),
             maxPrice: None,
@@ -70,8 +80,15 @@ impl SearchRequest {
             solutions: None
         };
 
-        SearchRequest {
+        let google_search_request = GoogleSearchRequest {
             request: request
+        };
+
+        Request {
+            id: None,
+            name: name.to_string(),
+            created_at: now_utc().to_timespec(),
+            google_search_request: google_search_request
         }
     }
 
@@ -86,16 +103,16 @@ impl SearchRequest {
             preferredCabin: None
         };
 
-        self.request.slice.push(slice);
+        self.google_search_request.request.slice.push(slice);
 
         self
     }
 
     pub fn to_json(&self) -> Result<String, Error> {
-        json::encode(self).map_err(|_| Error::EncodingJson )
+        json::encode(&self.google_search_request).map_err(|_| Error::EncodingJson )
     }
 
-    pub fn call(&self, api_key: &str) -> Result<Vec<Offer>, Error> {
+    pub fn call(&mut self, api_key: &str) -> Result<Vec<Offer>, Error> {
         let url = SEARCH_URL.to_string() + "?key=" + api_key;
         let request_body = try!(self.to_json());
 
@@ -112,10 +129,30 @@ impl SearchRequest {
 
         match response.status {
             StatusCode::Ok => {
-                let price_response: SearchResponse = try!(json::decode(&body).map_err(|_| Error::DecodingJson(body)));
-                price_response.to_offers()
+                self.create(&try!(Session::db_connection()));
+                Offer::from_json(body, self.id)
             },
             _ => Err(Error::ResponseNotOk(response.status.to_string()))
         }
+    }
+
+    pub fn create(&mut self, conn: &DbConnection) -> Result<(), Error> {
+        let mut sql = try!(conn.prepare(
+            "INSERT INTO requests
+                (
+                    name,
+                    created_at
+                ) VALUES (?, ?)"
+            ).map_err(|err| Error::PreparingDbQuery(err.to_string())));
+
+        try!(sql.execute(
+            &[
+                &self.name,
+                &self.created_at
+            ]).map_err(|err| Error::ExecutingDbQuery(err.to_string())));
+
+        self.id = Some(conn.last_insert_rowid());
+
+        Ok(())
     }
 }
