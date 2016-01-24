@@ -1,15 +1,15 @@
 extern crate fly_cheap;
 
-use fly_cheap::Config;
+use fly_cheap::Session;
 
 fn main() {
-    let config = Config::load().unwrap();
+    let session = Session::load().unwrap();
 
-    let conn = Config::db_connection().unwrap();
-    config.db_setup(&conn);
+    let conn = Session::db_connection().unwrap();
+    session.db_setup(&conn);
 
-    for request in config.search_requests() {
-        let mut offers = request.call(&config.google_api_key).unwrap();
+    for request in session.search_requests() {
+        let mut offers = request.call(&session.google_api_key).unwrap();
         for offer in &mut offers {
             println!("{}", offer);
             offer.create(&conn).unwrap();
@@ -19,8 +19,6 @@ fn main() {
     // TODO: store request dates
 
     // TODO: store requests & add a name
-
-    // TODO: rename config to session
 
     // TODO: if any price < total average => deliver report (mailgun?)
 

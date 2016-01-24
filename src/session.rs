@@ -11,7 +11,7 @@ const DEFAULT_CONFIG_PATH: &'static str = "config.toml";
 const DEFAULT_DB_PATH: &'static str = "data.sqlite";
 
 #[derive(RustcDecodable)]
-pub struct Config {
+pub struct Session {
     pub email: Option<String>,
     pub google_api_key: String,
     pub requests_per_day: u8,
@@ -26,7 +26,7 @@ pub struct Trip {
     pub dates: Vec<String>
 }
 
-impl Config {
+impl Session {
     pub fn load() -> Result<Self, Error> {
         let mut file = try!(File::open(DEFAULT_CONFIG_PATH).map_err(|_| Error::LoadingConfig));
         let mut buf = String::new();

@@ -6,11 +6,11 @@ extern crate rusqlite;
 extern crate time;
 extern crate mockito;
 
-pub mod config;
+pub mod session;
 pub mod flights;
 pub mod money;
 
-pub type Config = config::Config;
+pub type Session = session::Session;
 
 #[derive(Debug)]
 pub enum Error {
