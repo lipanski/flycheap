@@ -56,7 +56,7 @@ impl Session {
         Connection::open(DEFAULT_DB_PATH).map_err(|_| Error::EstablishingDbConnection)
     }
 
-    pub fn db_setup(&self, conn: &Connection) {
+    pub fn db_setup(&self, conn: &Connection) -> Result<(), Error> {
         let create_requests = conn.execute(
             "CREATE TABLE IF NOT EXISTS requests
             (
@@ -65,7 +65,7 @@ impl Session {
                 created_at INTEGER NOT NULL
             )", &[]);
 
-        create_requests.unwrap();
+        try!(create_requests.map_err(|err| Error::ExecutingDbQuery(err.to_string())));
 
         let create_offers = conn.execute(
             "CREATE TABLE IF NOT EXISTS offers
@@ -81,7 +81,7 @@ impl Session {
                 refundable INTEGER NOT NULL
             )", &[]);
 
-        create_offers.unwrap();
+        try!(create_offers.map_err(|err| Error::ExecutingDbQuery(err.to_string())));
 
         let create_flights = conn.execute(
             "CREATE TABLE IF NOT EXISTS flights
@@ -102,7 +102,9 @@ impl Session {
                 number TEXT NOT NULL
             )", &[]);
 
-        create_flights.unwrap();
+        try!(create_flights.map_err(|err| Error::ExecutingDbQuery(err.to_string())));
+
+        Ok(())
     }
 
     pub fn db_reset(&self) {

@@ -7,7 +7,7 @@ use flycheap::Session;
 fn main() {
     let session = Session::load().unwrap();
     let conn = Session::db_connection().unwrap();
-    session.db_setup(&conn);
+    session.db_setup(&conn).unwrap();
 
     loop {
         let next_run = session.next_run_duration().unwrap();
@@ -15,13 +15,17 @@ fn main() {
 
         sleep(next_run);
 
-        println!("requesting flights...");
+        println!("requesting offers...\n");
         for mut request in session.requests() {
-            let mut offers = request.call(&session.google_api_key).unwrap();
-            for offer in &mut offers {
-                println!("{}", offer);
-                offer.create(&conn).unwrap();
-            }
+            match request.call(&session.google_api_key) {
+                Ok(mut offers) => {
+                    for offer in &mut offers {
+                        println!("{}", offer);
+                        let _ = offer.create(&conn);
+                    }
+                },
+                Err(error) => println!("an error occured: {:?}\n", error)
+            };
         }
     }
 
