@@ -5,7 +5,7 @@ use hyper::Client;
 use hyper::header::{Connection, ContentType};
 use hyper::status::StatusCode;
 use mockito::url::Url;
-use time::{now_utc, Timespec};
+use time::{now_utc, Timespec, Duration};
 use rusqlite::Connection as DbConnection;
 
 use flights::Offer;
@@ -20,7 +20,7 @@ pub struct Request {
     pub id: Option<i64>,
     pub name: String,
     pub created_at: Timespec,
-    google_search_request: GoogleSearchRequest
+    google_search_request: Option<GoogleSearchRequest>
 }
 
 #[derive(RustcEncodable)]
@@ -88,7 +88,7 @@ impl Request {
             id: None,
             name: name.to_string(),
             created_at: now_utc().to_timespec(),
-            google_search_request: google_search_request
+            google_search_request: Some(google_search_request)
         }
     }
 
@@ -103,13 +103,13 @@ impl Request {
             preferredCabin: None
         };
 
-        self.google_search_request.request.slice.push(slice);
+        self.google_search_request.as_mut().unwrap().request.slice.push(slice);
 
         self
     }
 
     pub fn to_json(&self) -> Result<String, Error> {
-        json::encode(&self.google_search_request).map_err(|_| Error::EncodingJson )
+        json::encode(self.google_search_request.as_ref().unwrap()).map_err(|_| Error::EncodingJson )
     }
 
     pub fn call(&mut self, api_key: &str) -> Result<Vec<Offer>, Error> {
@@ -160,8 +160,27 @@ impl Request {
         Ok(())
     }
 
-    pub fn requests_in_the_past_24_hours() -> Result<Vec<Self>, Error> {
+    pub fn in_the_past_day(conn: &DbConnection) -> Result<Vec<Self>, Error> {
+        let mut sql = try!(conn.prepare(
+            "SELECT id, name, created_at FROM requests WHERE created_at > ?"
+            ).map_err(|err| Error::PreparingDbQuery(err.to_string())));
 
-        Ok(vec!())
+        let one_day_ago = (now_utc() - Duration::hours(24)).to_timespec();
+        let rows = try!(sql.query(&[&one_day_ago]).map_err(|err| Error::ExecutingDbQuery(err.to_string())));
+
+        let mut requests = Vec::new();
+        for row in rows {
+            let data = try!(row.map_err(|err| Error::UnwrappingDbRow(err.to_string())));
+            let request = Request {
+                id: data.get(0),
+                name: data.get(1),
+                created_at: data.get(2),
+                google_search_request: None
+            };
+
+            requests.push(request);
+        }
+
+        Ok(requests)
     }
 }

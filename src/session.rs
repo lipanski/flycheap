@@ -1,6 +1,9 @@
 use std::fs::{File, remove_file};
 use std::io::Read;
+use std::convert::From;
 
+use std::time::Duration as StdDuration;
+use time::{now, Duration, Tm, Timespec};
 use toml::decode_str;
 use rusqlite::Connection;
 
@@ -14,7 +17,7 @@ const DEFAULT_DB_PATH: &'static str = "data.sqlite";
 pub struct Session {
     pub email: Option<String>,
     pub google_api_key: String,
-    pub requests_per_day: u8,
+    pub requests_per_day: usize,
     pub sale_country: String,
     pub request_name: String,
     pub trips: Vec<Trip>
@@ -41,6 +44,12 @@ impl Session {
         if self.trips.len() == 0 { return 0 }
 
         self.trips.iter().fold(1, |acc, trip| acc * trip.dates.len())
+    }
+
+    pub fn request_sets_per_day(&self) -> usize {
+        if self.total_calls() == 0 { return 0 }
+
+        self.requests_per_day / self.total_calls()
     }
 
     pub fn db_connection() -> Result<Connection, Error> {
@@ -114,4 +123,47 @@ impl Session {
 
         requests
     }
+
+    pub fn duration_per_request(&self) -> Result<Duration, Error> {
+        if self.request_sets_per_day() == 0 { return Err(Error::NoTripsOrDates) }
+
+        Ok(Duration::hours(24) / (self.request_sets_per_day() as i32))
+    }
+
+    pub fn next_run_at(&self) -> Result<Tm, Error> {
+        let duration_per_request = try!(self.duration_per_request());
+        let now = now();
+        let mut next_run_at = midnight();
+
+        while next_run_at < now {
+            next_run_at = next_run_at + duration_per_request;
+        }
+
+        Ok(next_run_at)
+    }
+
+    pub fn next_run_seconds(&self) -> Result<u64, Error> {
+        let next_run_at = try!(self.next_run_at());
+        let next_run_seconds = next_run_at.to_timespec().sec - now().to_timespec().sec;
+
+        match next_run_seconds.is_positive() {
+            true => Ok(next_run_seconds as u64),
+            false => Ok(0)
+        }
+    }
+
+    pub fn next_run_duration(&self) -> Result<StdDuration, Error> {
+        let next_run_seconds = try!(self.next_run_seconds());
+
+        Ok(StdDuration::from_secs(next_run_seconds))
+    }
+}
+
+pub fn midnight() -> Tm {
+    let mut midnight = now();
+    midnight.tm_hour = 0;
+    midnight.tm_min = 0;
+    midnight.tm_sec = 0;
+
+    midnight
 }

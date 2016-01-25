@@ -22,6 +22,7 @@ pub enum Error {
     CommitingTransaction(String),
     PreparingDbQuery(String),
     ExecutingDbQuery(String),
+    UnwrappingDbRow(String),
     NoIdAssigned,
     EncodingJson,
     SendingRequest,
@@ -32,5 +33,6 @@ pub enum Error {
     NoFlights,
     ParsingMoney(String),
     ParsingTime(String),
-    FormattingTime
+    FormattingTime,
+    NoTripsOrDates
 }
